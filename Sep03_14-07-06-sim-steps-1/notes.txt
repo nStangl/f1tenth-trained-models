@@ -1,0 +1,4 @@
+nn 250 250
+no conv layers
+maxspeed 4
+in simuation works also with maxspeed 5
