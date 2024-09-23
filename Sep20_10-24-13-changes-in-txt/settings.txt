@@ -1,0 +1,39 @@
+neural network: 250
+STATE_DIM = NUM_BEAMS * HISTORY_SIZE + 3 
+
+
+sollte hoffentlich so direkt funktionieren, konnts leider nicht testen
+
+change function process_observation in AgentROSNode to:
+
+    def process_observation(self, obs):
+        scan = extract_scan(obs)
+        scan = convert_range(scan, (self.lidar_min, self.lidar_max), (-1, 1))
+        action = obs["state"]
+
+        if self.scan_buffer.all() == 0:
+            for i in range(self.scan_buffer.shape[0]):
+                self.scan_buffer[i, :] = scan
+            else:
+                self.scan_buffer[1, :] = self.scan_buffer[0, :]
+                self.scan_buffer[0, :] = scan
+
+        state = np.reshape(self.scan_buffer, (-1))
+        state = np.concatenate([state, action], axis=0)
+
+        distance_term = self.beam_distance_term(scan)
+        state = np.concatenate((state, np.array([distance_term])), axis=0)
+
+        return state
+
+change function create_observation in DriveROSNode to:
+
+    def create_observation(self):
+        observation = {}
+        observation["scan"] = self.scan
+        if observation["scan"] is None:
+            observation["scan"] = np.zeros(1080)
+        state = np.array([(self.speed, self.steering_angle)])
+        observation["state"] = state
+
+        return observation
