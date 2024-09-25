@@ -1,0 +1,5 @@
+neural network: 250 layers 
+state-dim: normal (41)
+
+no speed reward and no smooth steering / acceleration
+

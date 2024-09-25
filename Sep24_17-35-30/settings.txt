@@ -1,0 +1,4 @@
+neural network: 250 layers 
+state-dim: normal (41)
+
+lidar noise of 0.1 in step function, lr 1e-3, no smooth steering / accell, no velocity reward, mu 0.8, distance term 0.01, lr schedule 0.5 20000, old state, lap complete 10, new step-based lap completion reward (similar to paper)
