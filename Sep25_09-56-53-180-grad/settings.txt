@@ -1,0 +1,12 @@
+neural network: 250 layers 
+state-dim: normal (41)
+
+NUMBER_OF_BEAMS = 40
+HISTORY_SIZE = 1
+
+def extract_scan(obs):
+    scan = np.array(obs["scan"])
+    scan = scan[180:900]
+    inds = np.linspace(0, len(scan) - 1, NUMBER_OF_BEAMS).astype(int)
+    scan = scan[inds]
+    return scan
